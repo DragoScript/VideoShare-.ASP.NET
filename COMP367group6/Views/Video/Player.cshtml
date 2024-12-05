@@ -1,0 +1,11 @@
+﻿@model COMP367group6.Models.Video
+@{
+}
+
+<!-- Gets and Displays Title, UploadDate, Url, and User from Database -->
+<div>
+	<h2 class="text-center">@Model.Title</h2>
+	<p class="text-center">Posted Date: @Model.UploadDate</p>
+	<iframe width="1280" height="720" src="@Model.Url" title="@Model.Title" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+	<p>Shared By: @Model.User</p>
+</div>

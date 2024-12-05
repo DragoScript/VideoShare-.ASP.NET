@@ -1,0 +1,22 @@
+﻿@model COMP367group6.Models.User
+@{
+}
+<div class ="text-center">
+    <h3>Login</h3>
+    <br />
+    <form asp-action="Login" method="post">
+        <div>
+            <label>Username</label>
+            <input asp-for="Username" />
+            <span asp-validation-for="Username"></span>
+        </div>
+        <div>
+            <label>Password</label>
+            <input asp-for="Password" type="password" />
+            <span asp-validation-for="Password"></span>
+        </div>
+        <button type="submit">Login</button>
+    </form>
+    <br />
+    <a asp-area="" asp-controller="Account" asp-action="Register">Need to register for an account?</a>
+</div>
