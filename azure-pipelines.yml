@@ -5,7 +5,6 @@
 
 trigger:
 - main
-
 pool:
   name: Default
   demands:
@@ -16,31 +15,48 @@ variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
 
+stages:
 
-# Deliver 
-steps:
-- task: NuGetToolInstaller@1
-  inputs:
-    versionSpec: '6.8'
+# Build stage
+- stage: Build
+  jobs:
+    - job: BuildAndTest
+      steps:
+        - task: UseDotNet@2
+          inputs:
+            packageType: 'sdk'
+            version: '8.0'
 
-- task: NuGetCommand@2
-  inputs:
-    restoreSolution: '$(solution)'
+        # Compile the project using VSBuild
+        - task: VSBuild@1
+          inputs:
+            solution: '**\*.sln'
+            msbuildArgs: '/p:Configuration=$(buildConfiguration)'  # Use the configuration variable, e.g., 'Release'
 
-- task: VSBuild@1
-  inputs:
-    solution: '$(solution)'
-    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactStagingDirectory)"'
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
 
-- task: VSTest@2
-  inputs:
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
+        # Run unit tests and generate code coverage
+        - task: DotNetCoreCLI@2
+          inputs:
+            command: 'test'
+            projects: '**/*.csproj'
+            arguments: '--configuration $(buildConfiguration) --collect:"Code Coverage"'
 
-- task: PublishBuildArtifacts@1
-  inputs:
-    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-    ArtifactName: 'drop'
-    publishLocation: 'Container'
+        # Publish code coverage report (optional)
+        - task: PublishCodeCoverageResults@1
+          inputs:
+            codeCoverageTool: 'VisualStudio'
+            summaryFileLocation: '**/TestResults/*/coverage.cobertura.xml'
+            reportDirectory: '**/TestResults/*/codecoverage'
+          
+# Deliver Stage
+- stage: Deliver
+  dependsOn: Build
+  jobs:
+    - job: DeliverArtifact
+      steps:
+        # Step: Release the build artifact
+        - task: PublishBuildArtifacts@1
+          inputs:
+            artifactName: 'drop'
+            publishLocation: 'Container'
+            pathToPublish: '$(Build.ArtifactStagingDirectory)'
