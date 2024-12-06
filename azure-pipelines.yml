@@ -67,3 +67,17 @@ stages:
             artifactName: 'drop'
             publishLocation: 'Container'
             pathToPublish: '$(Build.ArtifactStagingDirectory)'
+
+# Deploy to Dev Environment
+- stage: DevEnv
+  dependsOn: Deliver
+  jobs:
+  - deployment: deploy
+    displayName: Deploy
+    environment: Development
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+            - script: echo This is a Dev Environment job Test
+              displayName: 'Dev Env'
