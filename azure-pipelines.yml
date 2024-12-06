@@ -79,8 +79,17 @@ stages:
       runOnce:
         deploy:
           steps:
-            - script: echo This is a Dev Environment job Test
-              displayName: 'Dev Env'
+          - task: DownloadBuildArtifacts@1
+            inputs:
+              buildType: 'current'
+              downloadType: 'specific'
+              downloadPath: '$(System.ArtifactsDirectory)'
+          - task: AzureRmWebAppDeployment@4 # Will need to add an Azure Subscription
+            inputs:
+              ConnectionType: 'AzureRM' 
+              appType: 'webApp'
+              WebAppName:  # TODO
+              packageForLinux: '$(System.ArtifactsDirectory)/**/*.zip'
 
 # Deploy to QA Testing Env Environment
 - stage: QATEnv
