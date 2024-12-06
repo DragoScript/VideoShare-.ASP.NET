@@ -8,7 +8,7 @@ trigger:
 pool:
   name: Default
   demands:
-  - agent.name -equals george
+  - agent.name -equals george2
 
 variables:
   solution: '**/*.sln'
@@ -84,12 +84,18 @@ stages:
               buildType: 'current'
               downloadType: 'specific'
               downloadPath: '$(System.ArtifactsDirectory)'
-          - task: AzureRmWebAppDeployment@4 # Will need to add an Azure Subscription
+          - task: IISWebAppManagementOnMachineGroup@0
             inputs:
-              ConnectionType: 'AzureRM' 
-              appType: 'webApp'
-              WebAppName:  # TODO
-              packageForLinux: '$(System.ArtifactsDirectory)/**/*.zip'
+              EnableIIS: true
+              IISDeploymentType: 'IISWebsite'
+              ActionIISWebsite: 'CreateOrUpdateWebsite'
+              WebsiteName: 'VideoShare'
+              WebsitePhysicalPath: '%SystemDrive%\inetpub\wwwroot'
+              WebsitePhysicalPathAuth: 'WebsiteUserPassThrough'
+          - task: IISWebAppDeploymentOnMachineGroup@0
+            inputs:
+              WebSiteName: 'VideoShare'
+              Package: '$(System.ArtifactsDirectory)\**\*.zip'
 
 # Deploy to QA Testing Env Environment
 - stage: QATEnv
