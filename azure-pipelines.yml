@@ -84,14 +84,6 @@ stages:
               buildType: 'current'
               downloadType: 'specific'
               downloadPath: '$(System.ArtifactsDirectory)'
-          - task: IISWebAppManagementOnMachineGroup@0
-            inputs:
-              EnableIIS: true
-              IISDeploymentType: 'IISWebsite'
-              ActionIISWebsite: 'CreateOrUpdateWebsite'
-              WebsiteName: 'VideoShare'
-              WebsitePhysicalPath: '%SystemDrive%\inetpub\wwwroot'
-              WebsitePhysicalPathAuth: 'WebsiteUserPassThrough'
           - task: IISWebAppDeploymentOnMachineGroup@0
             inputs:
               WebSiteName: 'VideoShare'
