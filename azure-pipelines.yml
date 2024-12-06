@@ -49,7 +49,7 @@ stages:
             arguments: '--configuration $(buildConfiguration) --collect:"Code Coverage"'
 
         # Publish code coverage report (optional)
-        - task: PublishCodeCoverageResults@1
+        - task: PublishCodeCoverageResults@2
           inputs:
             codeCoverageTool: 'VisualStudio'
             summaryFileLocation: '**/TestResults/*/coverage.cobertura.xml'
@@ -73,7 +73,7 @@ stages:
   dependsOn: Deliver
   jobs:
   - deployment: deploy
-    displayName: Deploy
+    displayName: Deploy to Dev Env 
     environment: Development
     strategy:
       runOnce:
@@ -81,3 +81,45 @@ stages:
           steps:
             - script: echo This is a Dev Environment job Test
               displayName: 'Dev Env'
+
+# Deploy to QA Testing Env Environment
+- stage: QATEnv
+  dependsOn: Deliver
+  jobs:
+  - deployment: deploy
+    displayName: Deploy to QA Testing Env
+    environment: QA Testing
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+            - script: echo This is a QA Testing Environment job
+              displayName: 'QAT Env'
+
+# Deploy to Staging  Environment
+- stage: StagingEnv
+  dependsOn: Deliver
+  jobs:
+  - deployment: deploy
+    displayName: Deploy to Staging Env 
+    environment: Staging
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+            - script: echo This is a Staging Environment job Test
+              displayName: 'Staging Env'
+
+# Deploy to Production  Environment
+- stage: ProductionEnv
+  dependsOn: Deliver
+  jobs:
+  - deployment: deploy
+    displayName: Deploy to Production Env 
+    environment: Production
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+            - script: echo This is a Production Environment job Test
+              displayName: 'Production Env'
