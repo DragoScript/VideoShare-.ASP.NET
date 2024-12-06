@@ -3,7 +3,7 @@ namespace COMP367group6.Models
 {
     public class User
     {
-        public int Id { get; set; }
+        public int Id { get; set; } // Primary Key
 
         [Required]
         [StringLength(50)]

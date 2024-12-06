@@ -103,7 +103,7 @@ namespace COMP367group6.Controllers
                 dbUser.LastLoginDate = DateTime.UtcNow;
                 _context.SaveChanges();
 
-                return RedirectToAction("Index", "Movies");
+                return RedirectToAction("Index", "Upload");
             }
 
             ModelState.AddModelError("", "Invalid login attempt.");

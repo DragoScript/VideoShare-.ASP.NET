@@ -1,0 +1,60 @@
+﻿@model COMP367group6.Models.VideoList
+@{
+    ViewData["Title"] = "Video Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome to VideoShare</h1>
+    <h3> Share your favourite videos</h3>
+    <br />
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(Model => Model.Videos![0].Title)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(Model => Model.Videos![0].Thumbnail)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(Model => Model.Videos![0].User)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(Model => Model.Videos![0].UploadDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(Model => Model.Videos![0].Url)
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null)
+            {
+                foreach (var item in Model.Videos)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Title)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Thumbnail)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.User)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.UploadDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Url)
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr><td colspan="5">No videos has been shared yet, would you like to <a asp-area="" asp-controller="Video" asp-action="Upload">share first</a>?</td></tr>
+            }
+        </tbody>
+    </table>
+</div>
