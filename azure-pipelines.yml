@@ -22,6 +22,9 @@ stages:
   jobs:
     - job: BuildAndTest
       steps:
+        - task: NuGetToolInstaller@1
+          inputs:
+            versionSpec: '6.8'
         - task: UseDotNet@2
           inputs:
             packageType: 'sdk'
