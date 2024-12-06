@@ -25,6 +25,10 @@ stages:
         - task: NuGetToolInstaller@1
           inputs:
             versionSpec: '6.8'
+        - task: NuGetCommand@2
+          inputs:
+            restoreSolution: '$(solution)'
+            
         - task: UseDotNet@2
           inputs:
             packageType: 'sdk'
